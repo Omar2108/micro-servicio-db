@@ -6,6 +6,7 @@
 package com.omar.microDB;
 
 import java.io.Serializable;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,6 +29,11 @@ public class User implements Serializable {
     private Integer id;
 
     private String name;
+    
+    private String apellidos;
+    
+    @Column(unique=true)
+    private Long cedula;
 
     private String email;
 
@@ -42,6 +48,24 @@ public class User implements Serializable {
     public String getName() {
         return name;
     }
+
+    public String getApellidos() {
+        return apellidos;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
+    }
+
+    public Long getCedula() {
+        return cedula;
+    }
+
+    public void setCedula(Long cedula) {
+        this.cedula = cedula;
+    }
+    
+    
 
     public void setName(String name) {
         this.name = name;
