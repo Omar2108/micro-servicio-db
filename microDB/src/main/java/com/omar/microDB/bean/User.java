@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -36,6 +38,18 @@ public class User implements Serializable {
     private Long cedula;
 
     private String email;
+    
+    @OneToOne
+    @JoinColumn(name = "celular_id")
+    private Celular celular;
+
+    public Celular getCelular() {
+        return celular;
+    }
+
+    public void setCelular(Celular celular) {
+        this.celular = celular;
+    }
 
     public Integer getId() {
         return id;
