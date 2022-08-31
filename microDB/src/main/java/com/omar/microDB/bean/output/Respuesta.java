@@ -5,49 +5,21 @@
  */
 package com.omar.microDB.bean.output;
 
+import lombok.Data;
+
 /**
  *
  * @author Omar Rodriguez
  * @version 1.0.0
  */
+
+@Data
 public class Respuesta {
     
     private String respuesta;
     private String error;
     private String nombrePersona;
     private Double numero;
-
-    public String getRespuesta() {
-        return respuesta;
-    }
-
-    public void setRespuesta(String respuesta) {
-        this.respuesta = respuesta;
-    }
-
-    public String getError() {
-        return error;
-    }
-
-    public void setError(String error) {
-        this.error = error;
-    }
-
-    public String getNombrePersona() {
-        return nombrePersona;
-    }
-
-    public void setNombrePersona(String nombrePersona) {
-        this.nombrePersona = nombrePersona;
-    }
-
-    public Double getNumero() {
-        return numero;
-    }
-
-    public void setNumero(Double numero) {
-        this.numero = numero;
-    }
 
    
 
