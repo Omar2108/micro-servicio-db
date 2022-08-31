@@ -1,6 +1,6 @@
 package com.omar.microDB;
 
-import com.omar.microDB.bean.Respuesta;
+import com.omar.microDB.bean.output.Respuesta;
 import com.omar.microDB.controllers.MainController;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;

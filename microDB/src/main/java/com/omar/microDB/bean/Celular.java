@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import lombok.Data;
 
 /**
  *
@@ -16,6 +17,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "celular")
+@Data
 public class Celular implements Serializable {
     
     @Id
@@ -30,37 +32,7 @@ public class Celular implements Serializable {
     @OneToOne(mappedBy = "celular")
     private User user;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-
-    public String getModelo() {
-        return modelo;
-    }
-
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
+    
     
     
     

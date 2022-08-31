@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import lombok.Data;
 
 /**
  *
@@ -24,6 +25,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "users")
+@Data
 public class User implements Serializable {
 
     @Id
@@ -43,51 +45,7 @@ public class User implements Serializable {
     @JoinColumn(name = "celular_id")
     private Celular celular;
 
-    public Celular getCelular() {
-        return celular;
-    }
-
-    public void setCelular(Celular celular) {
-        this.celular = celular;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getApellidos() {
-        return apellidos;
-    }
-
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
-
-    public Long getCedula() {
-        return cedula;
-    }
-
-    public void setCedula(Long cedula) {
-        this.cedula = cedula;
-    }
     
-    
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
 
     public void setEmail(String email) throws Exception {
         if (!email.contains("@")) {
