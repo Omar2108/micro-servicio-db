@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -27,11 +28,14 @@ import lombok.Data;
 @Table(name = "users")
 @Data
 public class User implements Serializable {
+    
+    private static final Long serioVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @NotBlank(message = "El nombre es obligatorio")
     private String name;
     
     private String apellidos;
@@ -39,6 +43,7 @@ public class User implements Serializable {
     @Column(unique=true)
     private Long cedula;
 
+    @Column(nullable = false)
     private String email;
     
     @OneToOne
@@ -54,5 +59,7 @@ public class User implements Serializable {
         }
         this.email = email;
     }
+    
+   
 
 }

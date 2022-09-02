@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.omar.microDB.controllers;
 
 import com.omar.microDB.bean.output.Respuesta;
@@ -10,20 +6,28 @@ import com.omar.microDB.bean.User;
 import com.omar.microDB.bean.input.Input;
 import com.omar.microDB.bean.output.RespuestaCalc;
 import com.omar.microDB.repository.UserRepository;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import javax.validation.Valid;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -51,7 +55,8 @@ public class MainController {
      * @throws java.lang.Exception
      */
     @PostMapping(path = "/add1") // Map ONLY POST Requests
-    public @ResponseBody Respuesta addNewUser(@RequestParam(required = false) String name, @RequestParam(required = false) String email, @RequestParam(required = false) String apellidos, @RequestParam(required = false) Long cedula) throws Exception {
+    public @ResponseBody
+    Respuesta addNewUser(@RequestParam(required = false) String name, @RequestParam(required = false) String email, @RequestParam(required = false) String apellidos, @RequestParam(required = false) Long cedula) throws Exception {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
         Respuesta respuesta = new Respuesta();
@@ -111,10 +116,10 @@ public class MainController {
 
     }
 
+    
     @PostMapping(value = "/add2", consumes = "application/json", produces = "application/json")
-    public @ResponseBody
-    User addNewUser2(@RequestBody User user) {
-        logger.debug("Consultado el usuario");
+    public @ResponseBody User addNewUser2(@Valid @RequestBody User user) {
+        logger.debug("Agregando el usuario");
         return userRepository.save(user);
     }
 
@@ -126,7 +131,8 @@ public class MainController {
     }
 
     @GetMapping(path = "/all")
-    public @ResponseBody Iterable<User> getAllUsers() {
+    public @ResponseBody
+    Iterable<User> getAllUsers() {
         // This returns a JSON or XML with the users
 
         try {
@@ -142,29 +148,42 @@ public class MainController {
     /**
      *
      * @param input
-     * @return 
+     * @return
      */
     @GetMapping(value = "/consultaU", consumes = "application/json", produces = "application/json")
-    public @ResponseBody Respuesta MainController(@RequestBody Input input) {
+    public @ResponseBody
+    Respuesta MainController(@RequestBody Input input) {
         logger.debug("Consultado el usuario");
         Respuesta res = new Respuesta();
-     
+
         //Consulto el usuario
         Optional<User> users = userRepository.findById(Integer.parseInt(input.getId_user()));
-        
+
         if (!users.isEmpty()) {
             User user = users.get();
             res.setNombrePersona(user.getName());
         }
         //invocamos el micro calculadora
         RestTemplate restTemplate = new RestTemplate();
-        String url ="http://localhost:9090/"+input.getOperacion()+"/"+input.getUno()+"/"+input.getDos();
-        ResponseEntity<RespuestaCalc> respuestaCalc = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<>(){});
-        
+        String url = "http://localhost:9090/" + input.getOperacion() + "/" + input.getUno() + "/" + input.getDos();
+        ResponseEntity<RespuestaCalc> respuestaCalc = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<>() {
+        });
+
         res.setNumero(Double.valueOf(respuestaCalc.getBody().getRespuesta()));
         return res;
     }
 
-   
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
 
 }

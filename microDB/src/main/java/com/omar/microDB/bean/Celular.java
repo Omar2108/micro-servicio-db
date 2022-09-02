@@ -20,6 +20,8 @@ import lombok.Data;
 @Data
 public class Celular implements Serializable {
     
+    private static final Long serioVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
